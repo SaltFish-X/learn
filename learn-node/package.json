@@ -16,5 +16,9 @@
     "async": "^2.5.0",
     "cheerio": "^1.0.0-rc.2",
     "superagent": "^3.8.0"
+  },
+  "dependencies": {
+    "ejs": "^2.5.7",
+    "express": "^4.16.2"
   }
 }
