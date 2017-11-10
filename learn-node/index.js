@@ -19,9 +19,7 @@ app.use(session({
   secret: config.session.secret,   // 设置 secre 计算hash并放在cookie中，使产生的signedCookie防篡改
   resave: true,   // 强制更新 session
   saveUninitialized: false,   // 设置为 false，强制创建一个 session，即使用户未登录
-  cookie: {
-    maxAge: config.session.maxAge     // 过期时间，过期后 cookie 中的 session id 自动删除
-  },
+  cookie: { maxAge: config.session.maxAge },// maxAge 过期时间，过期后 cookie 中的 session id 自动删除
   store: new MongoStore({ url: config.mongodb })   // 将 session 存储到 mongodb
 }))
 
@@ -32,7 +30,7 @@ app.use(require('express-formidable')({
   keepExtensions: true
 }))
 
-app.locals.bloh = { title: pkg.name, description: pkg.description }
+app.locals.blog = { title: pkg.name, description: pkg.description }
 
 app.use(function (req, res, next) {
   res.locals.user = req.session.user
