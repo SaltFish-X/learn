@@ -1,14 +1,14 @@
 module.exports = {
   checkLogin (req, res, next) {
     if (!req.session.user) {
-      req.flash(err, 'Not Login')
+      req.flash('error', 'Not Login')
       return res.redirect('/signin')
     }
     next()
   },
   checkNotLogin (req, res, next) {
-    if (requeset.session.user) {
-      req.flash(err, 'Logined')
+    if (req.session.user) {
+      req.flash('error', 'Logined')
       return res.redirect('back')
     }
     next()
