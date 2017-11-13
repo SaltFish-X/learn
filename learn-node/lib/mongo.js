@@ -37,4 +37,4 @@ exports.Post = mongolass.model('Post', {
   pv: { type: 'number' }
 })
 
-exports.Post.index({author:1, id:-1}).exec() // 按创建时间降序查看用户的文章列表
+exports.Post.index({ author: 1, id: -1 }).exec() // 按创建时间降序查看用户的文章列表
