@@ -2,27 +2,71 @@ var express = require('express')
 var router = express.Router()
 
 var checkLogin = require('../middlewares/check').checkLogin
+var PostModel = require('../models/posts')
 
 // GET /posts 所有用户或者特定用户的文章页
 //   eg: GET /posts?author=xxx
 router.get('/', function (req, res, next) {
-  res.send('posts');
+  var author = req.query.author
+
+  PostModel.getPosts(author)
+    .then(function (posts) {
+      res.render('posts', { posts })
+    })
+    .catch(next)
 });
 
 // POST /posts 发表一篇文章
 router.post('/', checkLogin, function (req, res, next) {
-  res.send(req.flash());
-});
+  var author = req.session.user._id
+  var title = req.fields.title
+  var content = req.fields.content
+
+  // 校验参数
+  try {
+    if (!title.length) {
+      throw new Error('请填写标题');
+    } else if (!content.length) {
+      throw new Error('请填写内容');
+    }
+  } catch (e) {
+    req.flash('error', e.message);
+    return res.redirect('back');
+  }
+
+  var post = { author, title, content, pv: 0 }
+
+  PostModel.create(post)
+    .then(function (result) {
+      post = result.ops[0]
+      req.flash('success')
+      res.redirect(`/post/${post.id}`)
+    })
+    .catch(next)
+})
 
 // GET /posts/create 发表文章页
 router.get('/create', checkLogin, function (req, res, next) {
-  res.send(req.flash());
-});
+  res.send('create');
+})
 
 // GET /posts/:postId 单独一篇的文章页
 router.get('/:postId', function (req, res, next) {
-  res.send(req.flash());
-});
+  var postId = req.query.postId
+
+  Promise.all([
+    PostModel.getPostById(postId),
+    PostModel.incPv(postId)
+  ])
+    .then(function (result) {
+      var post = result[0]
+      if (!post) {
+        throw new Error('The post not exist')
+      }
+      res.render('post', { post })
+    })
+    .catch(next)
+})
 
 // GET /posts/:postId/edit 更新文章页
 router.get('/:postId/edit', checkLogin, function (req, res, next) {

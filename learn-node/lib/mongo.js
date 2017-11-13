@@ -22,10 +22,19 @@ mongolass.plugin('addCreatedAt', {
     })
     return results
   },
-  afterFindOne(result){
-    if (result){
+  afterFindOne (result) {
+    if (result) {
       result.created_at = moment(objectIdToTimestamp(item.id)).format('YYYY-MM-DD HH:mm')
     }
     return result
   }
 })
+
+exports.Post = mongolass.model('Post', {
+  author: { type: Mongolass.Types.ObjectId },
+  title: { type: 'string' },
+  content: { type: 'string' },
+  pv: { type: 'number' }
+})
+
+exports.Post.index({author:1, id:-1}).exec() // 按创建时间降序查看用户的文章列表
