@@ -6,6 +6,9 @@ var flash = require('connect-flash')
 var config = require('config-lite')(__dirname)
 var routes = require('./routes')
 var pkg = require('./package')
+// 日志功能
+var winston = require('winston')
+var expressWinston = require('express-winston')
 
 var app = express()
 
@@ -23,15 +26,19 @@ app.use(session({
   store: new MongoStore({ url: config.mongodb })   // 将 session 存储到 mongodb
 }))
 
-app.use(flash()) // flash 中间件，用来显示通知
+// flash 中间件，用来显示通知
+app.use(flash()) 
 
+// 处理表单及文件上传的中间件
 app.use(require('express-formidable')({
   uploadDir: path.join(__dirname, 'public/img'),
   keepExtensions: true
 }))
 
+// 设置模板全局常量
 app.locals.blog = { title: pkg.name, description: pkg.description }
 
+// 添加模板必需的三个变量
 app.use(function (req, res, next) {
   res.locals.user = req.session.user
   res.locals.success = req.flash('success').toString()
@@ -39,8 +46,24 @@ app.use(function (req, res, next) {
   next()
 })
 
+// 正常请求的日志
+app.use(expressWinston.logger({
+  transports: [
+    new (winston.transports.Console)({ json: true, colorize: true }),
+    new winston.transports.File({ filename: 'logs/success.log' })
+  ]
+}))
+
+// 路由
 routes(app)
 
+// 错误请求的日志
+app.use(expressWinston.errorLogger({
+  transports:[
+    new winston.transports.Console({ json: true, colorize: true }),
+    new winston.transports.File({ filename: 'logs/error.log' })
+  ]
+}))
 app.use((error, req, res, next) => {
   res.render('error', { error })
 })
