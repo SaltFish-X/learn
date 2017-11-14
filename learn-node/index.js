@@ -27,7 +27,7 @@ app.use(session({
 }))
 
 // flash 中间件，用来显示通知
-app.use(flash()) 
+app.use(flash())
 
 // 处理表单及文件上传的中间件
 app.use(require('express-formidable')({
@@ -59,7 +59,7 @@ routes(app)
 
 // 错误请求的日志
 app.use(expressWinston.errorLogger({
-  transports:[
+  transports: [
     new winston.transports.Console({ json: true, colorize: true }),
     new winston.transports.File({ filename: 'logs/error.log' })
   ]
@@ -68,6 +68,11 @@ app.use((error, req, res, next) => {
   res.render('error', { error })
 })
 
-app.listen(config.port, function () {
-  console.log(`${pkg.name} listening on port ${config.port}`)
-})
+if (module.parent) {
+  module.exports = app
+} else {
+  // 监听端口，启动程序
+  app.listen(config.port, function () {
+    console.log(`${pkg.name} listening on port ${config.port}`)
+  })
+}
