@@ -11,7 +11,7 @@ router.get('/', checkNotLogin, function (req, res, next) {
   res.render('signup');
 });
 
-router.post('/',checkNotLogin, function (req, res, next) {
+router.post('/', checkNotLogin, function (req, res, next) {
   var name = req.fields.name
   var gender = req.fields.gender
   var bio = req.fields.bio
@@ -46,25 +46,26 @@ router.post('/',checkNotLogin, function (req, res, next) {
     return res.redirect('/signup');
   }
 
-  console.info('not catch')
+  // 明文密码加密
+  // password = sha1(password);
 
   var user = { name, password, gender, bio, avatar }
-  console.info('not catch', user)
+
   UserModel.create(user)
-    .then(function () {
-      user = result.ops[0]
+    .then(function (result) {
+      user = result.ops[0] // 此 user 是插入 mongodb 后的值，包含 _id
       delete user.password
-      req.session.user = user
+      req.session.user = user // 将用户信息存入 session
       req.flash('sucess', 'sucess')
       res.redirect('/posts')
     })
     .catch(function (e) {
-      fs.unlink(req.files.avatar.path)
+      fs.unlink(req.files.avatar.path) // 注册失败，异步删除上传的头像
       if (e.message.match('E11000 duplicate key')) {
         req.flash('error', 'name exit')
         return res.redirect('/signup')
       }
-      next()
+      next(e)
     })
 })
 

@@ -1,9 +1,10 @@
-var moment = require('moment')
-var objectIdToTimestamp = require('objectid-to-timestamp')
 var config = require('config-lite')(__dirname)
 var Mongolass = require('mongolass')
 var mongolass = new Mongolass()
-mongolass.connect()
+mongolass.connect(config.mongodb)
+
+var moment = require('moment')
+var objectIdToTimestamp = require('objectid-to-timestamp')
 
 exports.User = mongolass.model('User', {
   name: { type: 'string' },
@@ -24,7 +25,7 @@ mongolass.plugin('addCreatedAt', {
   },
   afterFindOne (result) {
     if (result) {
-      result.created_at = moment(objectIdToTimestamp(item.id)).format('YYYY-MM-DD HH:mm')
+      result.created_at = moment(objectIdToTimestamp(result.id)).format('YYYY-MM-DD HH:mm')
     }
     return result
   }

@@ -5,10 +5,10 @@ module.exports = {
     return User.create(user).exec()
   },
 
-  getUserByName(name){
+  getUserByName (name) {
     return User
-      .findOne({name:name})
-      .addCreateAt()
+      .findOne({ name })
+      .addCreatedAt()
       .exec()
   }
 }

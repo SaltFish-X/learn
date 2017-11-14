@@ -47,26 +47,27 @@ app.use(function (req, res, next) {
 })
 
 // 正常请求的日志
-app.use(expressWinston.logger({
-  transports: [
-    new (winston.transports.Console)({ json: true, colorize: true }),
-    new winston.transports.File({ filename: 'logs/success.log' })
-  ]
-}))
+// app.use(expressWinston.logger({
+//   transports: [
+//     new (winston.transports.Console)({ json: true, colorize: true }),
+//     new winston.transports.File({ filename: 'logs/success.log' })
+//   ]
+// }))
 
 // 路由
 routes(app)
 
 // 错误请求的日志
-app.use(expressWinston.errorLogger({
-  transports: [
-    new winston.transports.Console({ json: true, colorize: true }),
-    new winston.transports.File({ filename: 'logs/error.log' })
-  ]
-}))
-app.use((error, req, res, next) => {
-  res.render('error', { error })
-})
+// app.use(expressWinston.errorLogger({
+//   transports: [
+//     new winston.transports.Console({ json: true, colorize: true }),
+//     new winston.transports.File({ filename: 'logs/error.log' })
+//   ]
+// }))
+
+// app.use((err, req, res, next) => {
+//   res.render('error', { error: err })
+// })
 
 if (module.parent) {
   module.exports = app

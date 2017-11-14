@@ -1,3 +1,5 @@
+// import { error } from 'util';
+
 var sha1 = require('sha1')
 var express = require('express')
 var router = express.Router()
@@ -19,10 +21,10 @@ router.post('/', checkNotLogin, function (req, res, next) {
     .then(function (user) {
       if (!user) {
         req.flash('error', 'user not existed')
-        return req.redirect('back')
+        return res.redirect('back')
       }
 
-      if(sha1(password) !== user.password){
+      if (password !== user.password) {
         req.flash('error', 'password or username error')
         return res.redirect('back')
       }
