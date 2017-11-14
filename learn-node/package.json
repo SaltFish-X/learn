@@ -4,7 +4,7 @@
   "description": "learn blog",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --harmony test",
+    "test": "node --harmony ./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha",
     "superviesor": "supervisor --harmony index"
   },
   "author": "",
@@ -26,6 +26,7 @@
     "winston": "^2.4.0"
   },
   "devDependencies": {
+    "istanbul": "^0.4.5",
     "mocha": "^4.0.1",
     "supertest": "^3.0.0"
   }
