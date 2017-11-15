@@ -14,3 +14,7 @@
 12. sha1: sha1 加密，用于密码加密
 13. winston: 日志
 14. express-winston: 基于 winston 的用于 express 的日志中间件
+
+# debug list
+
+  大部分bug都是数据库的bug，使用id的地方应该使用_id

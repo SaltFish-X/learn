@@ -3,6 +3,7 @@ var router = express.Router()
 
 var checkLogin = require('../middlewares/check').checkLogin
 var PostModel = require('../models/posts')
+var CommentModel = require('../models/comments')
 
 // GET /posts 所有用户或者特定用户的文章页
 //   eg: GET /posts?author=xxx
@@ -14,7 +15,7 @@ router.get('/', function (req, res, next) {
       res.render('posts', { posts })
     })
     .catch(next)
-});
+})
 
 // POST /posts 发表一篇文章
 router.post('/', checkLogin, function (req, res, next) {
@@ -35,35 +36,38 @@ router.post('/', checkLogin, function (req, res, next) {
   }
 
   var post = { author, title, content, pv: 0 }
-
+  console.info(post)
   PostModel.create(post)
     .then(function (result) {
       post = result.ops[0]
+
       req.flash('success')
-      res.redirect(`/post/${post.id}`)
+      res.redirect(`/posts/${post._id}`)
     })
     .catch(next)
 })
 
 // GET /posts/create 发表文章页
 router.get('/create', checkLogin, function (req, res, next) {
-  res.send('create');
+  res.render('create')
 })
 
 // GET /posts/:postId 单独一篇的文章页
 router.get('/:postId', function (req, res, next) {
-  var postId = req.query.postId
+  var postId = req.params.postId
 
   Promise.all([
     PostModel.getPostById(postId),
-    PostModel.incPv(postId)
+    PostModel.incPv(postId),
+    CommentModel.getComments(postId)
   ])
     .then(function (result) {
       var post = result[0]
+      var comments = result[2]
       if (!post) {
         throw new Error('The post not exist')
       }
-      res.render('post', { post })
+      res.render('post', { post, comments })
     })
     .catch(next)
 })
@@ -115,12 +119,31 @@ router.get('/:postId/remove', checkLogin, function (req, res, next) {
 
 // POST /posts/:postId/comment 创建一条留言
 router.post('/:postId/comment', checkLogin, function (req, res, next) {
-  res.send(req.flash());
+  var author = req.session.user._id
+  var postId = req.params.postId
+  var content = req.fields.content
+
+  var comment = { author, postId, content }
+
+  CommentModel.create(comment)
+    .then(_ => {
+      req.flash('sucess')
+      res.redirect('back')
+    })
+    .catch(next)
 });
 
 // GET /posts/:postId/comment/:commentId/remove 删除一条留言
 router.get('/:postId/comment/:commentId/remove', checkLogin, function (req, res, next) {
-  res.send(req.flash());
+  var commentId = req.params.commentId
+  var author = req.session.user._id
+
+  CommentModel.delCommentById(commentId, author)
+    .then(_ => {
+      req.flash('sucess')
+      res.redirect('back')
+    })
+    .catch(next)
 });
 
 module.exports = router;
