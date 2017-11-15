@@ -29,9 +29,9 @@ module.exports = {
       .find(query)
       .populate({ path: 'author', model: 'User' })
       .sort({ _id: -1 })
-      .addCreatedAt()
-      .addCommentsCount()
-      .contentToHtml()
+      // .addCreatedAt()
+      // .addCommentsCount()
+      // .contentToHtml()
       .exec()
   },
 

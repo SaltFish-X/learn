@@ -11,7 +11,7 @@ router.get('/', function (req, res, next) {
   var author = req.query.author
 
   PostModel.getPosts(author)
-    .then(function (posts) {
+    .then(posts => {
       res.render('posts', { posts })
     })
     .catch(next)
