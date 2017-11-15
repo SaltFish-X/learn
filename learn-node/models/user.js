@@ -10,5 +10,6 @@ module.exports = {
       .findOne({ name })
       .addCreatedAt()
       .exec()
+      .catch(err=>console.info(err))
   }
 }

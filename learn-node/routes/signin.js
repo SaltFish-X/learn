@@ -25,7 +25,7 @@ router.post('/', checkNotLogin, function (req, res, next) {
       }
 
       if (password !== user.password) {
-        req.flash('error', 'password or username error')
+        req.flash('error', 'password error')
         return res.redirect('back')
       }
 
