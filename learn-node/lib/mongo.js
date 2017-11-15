@@ -20,7 +20,7 @@ exports.User.index({ name: 1 }, { unique: true }).exec() // 根据用户名找�
 mongolass.plugin('addCreatedAt', {
   afterFind (results) {
     results.forEach((item) => {
-      item.created_at = monment(objectIdToTimestamp(item._id)).format('YYYY-MM-DD HH:mm')
+      item.created_at = moment(objectIdToTimestamp(item._id)).format('YYYY-MM-DD HH:mm')
     })
     return results
   },

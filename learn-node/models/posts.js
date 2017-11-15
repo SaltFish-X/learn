@@ -29,9 +29,9 @@ module.exports = {
       .find(query)
       .populate({ path: 'author', model: 'User' })
       .sort({ _id: -1 })
-      // .addCreatedAt()
-      // .addCommentsCount()
-      // .contentToHtml()
+      .addCreatedAt()
+      .addCommentsCount()
+      .contentToHtml()
       .exec()
   },
 
@@ -70,7 +70,7 @@ module.exports = {
 // 将 post 的 content 从 markdown 转换成 html
 Post.plugin('contentToHtml', {
   afterFind (posts) {
-    return posts.map(function (posts) {
+    return posts.map((post) => {
       post.content = marked(post.content)
       return post
     })
@@ -87,7 +87,7 @@ Post.plugin('contentToHtml', {
 Post.plugin('addCommentsCount', {
   afterFind (posts) {
     return Promise.all(posts.map(post => {
-      CommentModel.getCommentsCount(post._id).then(commentsCount => {
+      return CommentModel.getCommentsCount(post._id).then(commentsCount => {
         post.commentsCount = commentsCount
         return post
       })
