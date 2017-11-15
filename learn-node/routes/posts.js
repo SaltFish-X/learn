@@ -84,7 +84,7 @@ router.get('/:postId/edit', checkLogin, function (req, res, next) {
       } else if (author.toString() !== post.author._id.toString()) {
         throw new Error('权限不足');
       }
-      res.render('edit', post)
+      res.render('edit', { post })
     })
     .catch(next)
 })
@@ -127,7 +127,7 @@ router.post('/:postId/comment', checkLogin, function (req, res, next) {
 
   CommentModel.create(comment)
     .then(_ => {
-      req.flash('sucess')
+      req.flash('sucess', '发布成功')
       res.redirect('back')
     })
     .catch(next)
@@ -141,7 +141,7 @@ router.get('/:postId/comment/:commentId/remove', checkLogin, function (req, res,
   CommentModel.delCommentById(commentId, author)
     .then(_ => {
       req.flash('sucess')
-      res.redirect('back')
+      res.redirect('back', '删除成功')
     })
     .catch(next)
 });

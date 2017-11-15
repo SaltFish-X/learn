@@ -24,7 +24,7 @@ module.exports = {
 
   // 通过文章 id 删除该文章下所有留言
   delCommentByPostId (postId) {
-    return Comment({ postId }).exec()
+    return Comment.remove({ postId }).exec()
   },
 
   // 通过文章 id 获取该文章下所有留言，按留言创建时间升序
