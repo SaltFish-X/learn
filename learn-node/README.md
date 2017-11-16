@@ -18,3 +18,5 @@
 # debug list
 
   大部分bug都是数据库的bug，使用id的地方应该使用_id
+
+# Todo 部署服务
