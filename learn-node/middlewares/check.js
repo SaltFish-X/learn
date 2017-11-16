@@ -9,8 +9,7 @@ module.exports = {
   checkNotLogin (req, res, next) {
     if (req.session.user) {
       req.flash('error', 'Logined')
-      return req.send('ok')
-      // return res.redirect('back')
+      return res.redirect('back')
     }
     next()
   }

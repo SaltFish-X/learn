@@ -36,7 +36,7 @@ router.post('/', checkLogin, function (req, res, next) {
   }
 
   var post = { author, title, content, pv: 0 }
-  console.info(post)
+
   PostModel.create(post)
     .then(function (result) {
       post = result.ops[0]
