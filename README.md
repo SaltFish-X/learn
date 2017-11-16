@@ -6,11 +6,11 @@
 
 - [ ] 爬虫
 - [ ] mysql后台
+- [x] blog
 
-## learn-ts-vue
+## learn-vue
 
-- [ ] ts+vue
+- [ ] vue+ts
 
-## learn-vuex
 
-- [x] use vuex
+- [x] vuex
