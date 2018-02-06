@@ -1,0 +1,15 @@
+{
+  "name": "learn-node-puppeteer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "test",
+    "build": "PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true npm install"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "puppeteer": "^1.0.0"
+  }
+}
