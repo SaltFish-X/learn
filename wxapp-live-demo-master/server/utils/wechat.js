@@ -4,11 +4,11 @@
  *
  * Distributed under terms of the MIT license.
  */
-const axios = require('axios');
-const WXBizDataCrypt = require('../aes/WXBizDataCrypt');
+const axios = require('axios')
+const WXBizDataCrypt = require('../aes/WXBizDataCrypt')
 
-const WECHAT_APPID = 'wx95962d15996b073f';
-const WECHAT_APPSECRET = 'ee1495665269ef2d9303ac6031f4715e';
+const WECHAT_APPID = 'wx7f17d0be8b06ceab'
+const WECHAT_APPSECRET = '5f599ff17ce3a3338a2df04100e3f2c6'
 
 /**
  * 获取微信信息
@@ -17,13 +17,13 @@ const WECHAT_APPSECRET = 'ee1495665269ef2d9303ac6031f4715e';
  * @returns {{openid: string, session_key: string, unionid: string}}
  */
 exports.getUserInfo = async function(code) {
-  const URL = `https://api.weixin.qq.com/sns/jscode2session?appid=${WECHAT_APPID}&secret=${WECHAT_APPSECRET}&js_code=${code}&grant_type=authorization_code`;
+  const URL = `https://api.weixin.qq.com/sns/jscode2session?appid=${WECHAT_APPID}&secret=${WECHAT_APPSECRET}&js_code=${code}&grant_type=authorization_code`
   try {
-    const res = await axios.get(URL);
-    const data = res.data;
-    return data;
-  } catch(e) {
-    throw new Error('get Session key error: ', e);
+    const res = await axios.get(URL)
+    const data = res.data
+    return data
+  } catch (e) {
+    throw new Error('get Session key error: ', e)
   }
 }
 
@@ -36,6 +36,6 @@ exports.getUserInfo = async function(code) {
  * @returns {any}
  */
 exports.decryptData = function(iv, sessionKey, encryptedData) {
-  const pc = new WXBizDataCrypt(WECHAT_APPID, sessionKey);
-  return pc.decryptData(encryptedData, iv);
+  const pc = new WXBizDataCrypt(WECHAT_APPID, sessionKey)
+  return pc.decryptData(encryptedData, iv)
 }
